@@ -1,25 +1,39 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using HdMovies.Data;
 using HdMovies.Models;
+using HdMovies.Helpers;
 
 namespace HdMovies.Pages.Movies
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public EditModel(ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         [BindProperty]
         public Movie Movie { get; set; }
+
+        [BindProperty]
+        public IFormFile UploadPoster { get; set; }
+
+        [BindProperty]
+        public string[] SelectedGenres { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
@@ -28,6 +42,7 @@ namespace HdMovies.Pages.Movies
                 return NotFound();
             }
 
+            ViewData["genres"] = Enum.GetNames(typeof(Genre));
             Movie = await _context.Movies
                 .Include(m => m.UploadedUser).FirstOrDefaultAsync(m => m.Id == id);
 
@@ -35,7 +50,7 @@ namespace HdMovies.Pages.Movies
             {
                 return NotFound();
             }
-           ViewData["UploadedUserId"] = new SelectList(_context.Set<User>(), "Id", "Id");
+           
             return Page();
         }
 
@@ -49,6 +64,16 @@ namespace HdMovies.Pages.Movies
             }
 
             _context.Attach(Movie).State = EntityState.Modified;
+            Movie.GenerateSlug();
+            Movie.SetGenres(SelectedGenres);
+
+            if (UploadPoster != null)
+            {
+                var fileName = $"{Movie.Slug}_poster.jpg";
+                var fileNameAbsPath = Path.Combine(_env.WebRootPath, "db_files", "img", fileName);
+                Movie.PosterPath = $"/db_files/img/{fileName}";
+                FileHelper.SaveFileAsync(UploadPoster.OpenReadStream(), fileNameAbsPath);
+            }
 
             try
             {
@@ -66,7 +91,7 @@ namespace HdMovies.Pages.Movies
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { slug = Movie.Slug });
         }
 
         private bool MovieExists(string id)

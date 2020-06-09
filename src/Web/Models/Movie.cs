@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using SuxrobGM.Sdk.Extensions;
 using SuxrobGM.Sdk.Utils;
@@ -57,7 +56,7 @@ namespace HdMovies.Models
 
         public string Genres { get; private set; }
 
-        public void SetGenres(List<Genre> genres)
+        public void SetGenres(string[] genres)
         {
             Genres = string.Join(',', genres);
         }

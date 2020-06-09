@@ -2,10 +2,26 @@
 @model HdMovies.Pages.Movies.ListModel
 
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = "Watch movies in HD online";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Смотреть фильмы в HD онлайн</h1>
+<h1>@ViewData["Title"]</h1>
 
-
+<div class="row">
+    @if (!Model.Movies.Any())
+    {
+        <h4>There have not any movies ;(</h4>
+    }
+    else
+    {
+        <div class="col-12">
+            @foreach (var movie in Model.Movies)
+            {
+            <div class="card card-shadow my-4">
+                <img class="card-img-top" src="@movie.PosterPath" alt="@movie.Title Poster" />
+            </div>
+            }
+        </div>
+    }
+</div>

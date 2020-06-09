@@ -2,8 +2,12 @@
 @model HdMovies.Pages.Movies.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Movie";
     Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+@section Head {
+    <link href="~/lib/fileupload/fileupload.css" rel="stylesheet" />
 }
 
 <h1>Edit</h1>
@@ -11,24 +15,14 @@
 <h4>Movie</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form method="post">
+    <div class="px-5">
+        <form enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Movie.Id" />
             <div class="form-group">
                 <label asp-for="Movie.Title" class="control-label"></label>
                 <input asp-for="Movie.Title" class="form-control" />
                 <span asp-validation-for="Movie.Title" class="text-danger"></span>
-            </div>           
-            <div class="form-group">
-                <label asp-for="Movie.Description" class="control-label"></label>
-                <input asp-for="Movie.Description" class="form-control" />
-                <span asp-validation-for="Movie.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Movie.PosterPath" class="control-label"></label>
-                <input asp-for="Movie.PosterPath" class="form-control" />
-                <span asp-validation-for="Movie.PosterPath" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Movie.Producer" class="control-label"></label>
@@ -39,23 +33,47 @@
                 <label asp-for="Movie.ReleaseDate" class="control-label"></label>
                 <input asp-for="Movie.ReleaseDate" class="form-control" />
                 <span asp-validation-for="Movie.ReleaseDate" class="text-danger"></span>
-            </div>                      
-            <div class="form-group">
-                <label asp-for="Movie.Genres" class="control-label"></label>
-                <input asp-for="Movie.Genres" class="form-control" />
-                <span asp-validation-for="Movie.Genres" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="Movie.Genres" class="control-label"></label>
+                <ejs-multiselect id="genres" ejs-for="SelectedGenres" dataSource="@ViewData["genres"]" placeholder="Select genres"></ejs-multiselect>
+                <span asp-validation-for="Movie.Genres" class="text-danger"></span>
+            </div>
+            <div>
+                <label>Poster</label>
+                <div class="file-upload mb-2">
+                    <div class="image-upload-wrap">
+                        <input class="file-upload-input" asp-for="UploadPoster" type="file" onchange="readURL(this);" accept="image/*" />
+                        <div class="drag-text">
+                            <h3>Drag and drop a file or select add Image</h3>
+                        </div>
+                    </div>
+                    <div class="file-upload-content">
+                        <img class="file-upload-image" src="#" alt="your image" />
+                        <div class="image-title-wrap">
+                            <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Movie.Description" class="control-label"></label>
+                <textarea rows="5" asp-for="Movie.Description" class="form-control"></textarea>
+                <span asp-validation-for="Movie.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./List">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/fileupload/fileupload.js"></script>
 }
