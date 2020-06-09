@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using HdMovies.Data;
 using HdMovies.Models;
+using Syncfusion.Licensing;
 
 namespace HdMovies
 {
@@ -21,6 +22,7 @@ namespace HdMovies
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            SyncfusionLicenseProvider.RegisterLicense(Configuration.GetSection("SynLicenseKey").Value);
             services.AddRazorPages(options =>
             {
                 options.Conventions.AddPageRoute("/Movies/List", "/Movies");

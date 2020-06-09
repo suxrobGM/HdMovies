@@ -17,7 +17,9 @@ namespace HdMovies.Models
         Family,
         Thriller,
         Documentary,
-        Historical
+        Historical,
+        Fantasy,
+        Animation
     }
 
     public class Movie
