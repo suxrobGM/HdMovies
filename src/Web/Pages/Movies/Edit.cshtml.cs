@@ -43,8 +43,8 @@ namespace HdMovies.Pages.Movies
             }
 
             ViewData["genres"] = Enum.GetNames(typeof(Genre));
-            Movie = await _context.Movies
-                .Include(m => m.UploadedUser).FirstOrDefaultAsync(m => m.Id == id);
+            Movie = await _context.Movies.Include(m => m.UploadedUser).FirstOrDefaultAsync(m => m.Id == id);
+            SelectedGenres = Movie.Genres.Split(',');
 
             if (Movie == null)
             {

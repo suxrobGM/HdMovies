@@ -36,7 +36,7 @@ namespace HdMovies.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(64);
 
-                    b.Property<string>("Producer")
+                    b.Property<string>("Director")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(64);

@@ -10,15 +10,17 @@ namespace HdMovies.Models
     public enum Genre
     {
         Action,
+        Adventure,
+        Animation,
         Comedy,
-        Horror,
-        Western,
-        Family,
-        Thriller,
         Documentary,
+        Drama,
         Historical,
+        Horror,
+        Family,
         Fantasy,
-        Animation
+        Thriller,
+        Western      
     }
 
     public class Movie
@@ -42,7 +44,7 @@ namespace HdMovies.Models
 
         [StringLength(64, ErrorMessage = "Characters must be less than 64")]
         [Required]
-        public string Producer { get; set; }
+        public string Director { get; set; }
 
         [Required]
         public DateTime ReleaseDate { get; set; }

@@ -8,6 +8,7 @@ namespace HdMovies.Helpers
         {
             using var fileStream = new FileStream(filePath, FileMode.Create);
             await stream.CopyToAsync(fileStream);
+            fileStream.Close();
         }
     }
 }

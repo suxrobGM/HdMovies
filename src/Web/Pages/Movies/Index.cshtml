@@ -1,91 +1,66 @@
 ﻿@page "{slug}"
 @model HdMovies.Pages.Movies.IndexModel
+@namespace HdMovies.Models
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = Model.Movie.Title;
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Slug)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].PosterPath)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Producer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].ReleaseDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Timestamp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].ViewCount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].UploadedUser)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movie[0].Genres)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Movie) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Slug)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PosterPath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Producer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReleaseDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Timestamp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ViewCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UploadedUser.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genres)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-4 col-md-3">
+        <img class="img-thumbnail img-fluid" src="@Model.Movie.PosterPath" alt="@Model.Movie.Title Poster">
+
+        @if (User.Identity.Name == Model.Movie.UploadedUser.UserName
+           || User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+        {
+            <ul class="nav">
+                <li class="nav-item m-2">
+                    <a class="nav-link btn btn-sm btn-warning" asp-page="/Movies/Edit" asp-route-id="@Model.Movie.Id">Edit</a>
+                </li>
+                <li class="nav-item m-2">
+                    <a class="nav-link btn btn-sm btn-danger" asp-page="/Movies/Delete" asp-route-id="@Model.Movie.Id">Delete</a>
+                </li>
+            </ul>
+        }
+    </div>
+    <div class="col-8 col-md-9">
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Movie.ReleaseDate):
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Movie.ReleaseDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Movie.Director):
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Movie.Director)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Movie.Genres):
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Movie.Genres)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Movie.ViewCount):
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Movie.ViewCount)
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="row my-3">
+    <div class="col-12">
+        <h2>Description of movie &quot;@Model.Movie.Title&quot;</h2>
+        <p>
+            @Model.Movie.Description
+        </p>
+    </div>
+</div>
+

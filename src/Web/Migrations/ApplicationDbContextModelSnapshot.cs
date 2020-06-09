@@ -27,15 +27,15 @@ namespace HdMovies.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(4096);
 
+                    b.Property<string>("Director")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
                     b.Property<string>("Genres")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PosterPath")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(64);
-
-                    b.Property<string>("Producer")
-                        .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(64);
 

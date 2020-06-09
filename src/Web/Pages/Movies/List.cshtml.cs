@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using SuxrobGM.Sdk.Pagination;
 using HdMovies.Data;
 using HdMovies.Models;
 
@@ -16,12 +16,12 @@ namespace HdMovies.Pages.Movies
             _context = context;
         }
 
-        public IList<Movie> Movies { get;set; }
+        public PaginatedList<Movie> Movies { get;set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int pageIndex)
         {
-            Movies = await _context.Movies
-                .Include(m => m.UploadedUser).ToListAsync();
+            var movies = _context.Movies.Include(m => m.UploadedUser).AsNoTracking();
+            Movies = await PaginatedList<Movie>.CreateAsync(movies, pageIndex, 24);
         }
     }
 }

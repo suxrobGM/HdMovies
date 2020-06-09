@@ -15,13 +15,22 @@
     }
     else
     {
-        <div class="col-12">
-            @foreach (var movie in Model.Movies)
-            {
-            <div class="card card-shadow my-4">
-                <img class="card-img-top" src="@movie.PosterPath" alt="@movie.Title Poster" />
+        @foreach (var movie in Model.Movies)
+        {
+            <div class="col-6 col-sm-4 col-md-3 my-3">
+                <div class="card card-shadow my-4">
+                    <img class="card-img-top" src="@movie.PosterPath" alt="@movie.Title Poster" />
+                    <div class="card-body">
+                        <h4 class="card-title">@movie.Title</h4>
+                        <p class="card-text">@movie.ReleaseDate.Year, @movie.Genres.Split(',').FirstOrDefault()</p>
+                        <a class="btn btn-primary" asp-page="/Movies/Index" asp-route-slug="@movie.Slug">Watch Movie</a>
+                    </div>
+                </div>
             </div>
-            }
-        </div>
+        }
     }
+</div>
+
+<div id="pagination" class="d-flex">
+    <pagination class="mx-auto" page-index="@Model.Movies.PageIndex" total-pages="@Model.Movies.TotalPages" base-url="/Movies/List" />
 </div>
