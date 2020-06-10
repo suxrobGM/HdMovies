@@ -51,13 +51,13 @@ namespace HdMovies.Pages.Movies
             }
 
             Movie = await _context.Movies.FindAsync(id);
-            var imgFileName = Path.GetFileName(Movie.PosterPath);
-            var posterFullPath = Path.Combine(_env.WebRootPath, "db_files", "img", imgFileName);
-            FileHelper.DeleteFile(posterFullPath);
 
             if (Movie != null)
             {
                 _context.Movies.Remove(Movie);
+                var imgFileName = Path.GetFileName(Movie.PosterPath);
+                var posterFullPath = Path.Combine(_env.WebRootPath, "db_files", "img", imgFileName);
+                FileHelper.DeleteFile(posterFullPath);
                 await _context.SaveChangesAsync();
             }
 
