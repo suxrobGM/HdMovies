@@ -1,19 +1,26 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using HdMovies.Data;
 using HdMovies.Models;
+using HdMovies.Helpers;
 
 namespace HdMovies.Pages.Movies
 {
+    [Authorize]
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public DeleteModel(ApplicationDbContext context)
+        public DeleteModel(ApplicationDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         [BindProperty]
@@ -44,6 +51,9 @@ namespace HdMovies.Pages.Movies
             }
 
             Movie = await _context.Movies.FindAsync(id);
+            var imgFileName = Path.GetFileName(Movie.PosterPath);
+            var posterFullPath = Path.Combine(_env.WebRootPath, "db_files", "img", imgFileName);
+            FileHelper.DeleteFile(posterFullPath);
 
             if (Movie != null)
             {
@@ -51,7 +61,7 @@ namespace HdMovies.Pages.Movies
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Movies/List");
         }
     }
 }

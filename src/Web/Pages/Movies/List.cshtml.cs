@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SuxrobGM.Sdk.Pagination;
@@ -21,7 +22,7 @@ namespace HdMovies.Pages.Movies
         public async Task OnGetAsync(int pageIndex)
         {
             var movies = _context.Movies.Include(m => m.UploadedUser).AsNoTracking();
-            Movies = await PaginatedList<Movie>.CreateAsync(movies, pageIndex, 24);
+            Movies = await PaginatedList<Movie>.CreateAsync(movies.OrderByDescending(i => i.Timestamp), pageIndex, 12);
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using HdMovies.Models;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
+using HdMovies.Models;
 
 namespace HdMovies.Data
 {

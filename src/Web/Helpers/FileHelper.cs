@@ -10,5 +10,13 @@ namespace HdMovies.Helpers
             await stream.CopyToAsync(fileStream);
             fileStream.Close();
         }
+
+        public static void DeleteFile(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
     }
 }

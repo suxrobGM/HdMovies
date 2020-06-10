@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Syncfusion.Licensing;
 using HdMovies.Data;
 using HdMovies.Models;
-using Syncfusion.Licensing;
 
 namespace HdMovies
 {

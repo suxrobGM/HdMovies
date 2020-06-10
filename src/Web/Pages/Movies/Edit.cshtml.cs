@@ -63,15 +63,19 @@ namespace HdMovies.Pages.Movies
                 return Page();
             }
 
-            _context.Attach(Movie).State = EntityState.Modified;
-            Movie.GenerateSlug();
-            Movie.SetGenres(SelectedGenres);
+            var movie = await _context.Movies.FirstAsync(i => i.Id == Movie.Id);
+            movie.Title = Movie.Title;
+            movie.ReleaseDate = Movie.ReleaseDate;
+            movie.Director = Movie.Director;
+            movie.Description = Movie.Description;
+            movie.GenerateSlug();
+            movie.SetGenres(SelectedGenres);
 
             if (UploadPoster != null)
             {
-                var fileName = $"{Movie.Slug}_poster.jpg";
+                var fileName = $"{movie.Slug}_poster.jpg";
                 var fileNameAbsPath = Path.Combine(_env.WebRootPath, "db_files", "img", fileName);
-                Movie.PosterPath = $"/db_files/img/{fileName}";
+                movie.PosterPath = $"/db_files/img/{fileName}";
                 FileHelper.SaveFileAsync(UploadPoster.OpenReadStream(), fileNameAbsPath);
             }
 
@@ -91,7 +95,7 @@ namespace HdMovies.Pages.Movies
                 }
             }
 
-            return RedirectToPage("./Index", new { slug = Movie.Slug });
+            return RedirectToPage("/Movies/Index", new { slug = movie.Slug });
         }
 
         private bool MovieExists(string id)
